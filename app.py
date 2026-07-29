@@ -213,7 +213,12 @@ def upgrade_schema():
                 db.session.execute(text('ALTER TABLE "order" ADD COLUMN total_amount FLOAT DEFAULT 0.0'))
                 db.session.commit()
                 print("Column added successfully.")
-        # Add more columns here if needed in the future
+
+# ---------- INIT DATABASE (runs on app startup) ----------
+with app.app_context():
+    db.create_all()
+    upgrade_schema()
+    seed_demo_data()
 
 # ---------- CART ----------
 def get_cart():
@@ -1324,14 +1329,6 @@ class AppTests(unittest.TestCase):
         rv = self.app.get('/admin')
         self.assertEqual(rv.status_code, 200)
 
-# ---------- RUN ----------
+# ---------- RUN (only when executed directly) ----------
 if __name__ == '__main__':
-    import sys
-    if 'test' in sys.argv:
-        run_tests()
-    else:
-        with app.app_context():
-            db.create_all()
-            upgrade_schema()   # auto‑fix missing columns
-            seed_demo_data()
-        app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
