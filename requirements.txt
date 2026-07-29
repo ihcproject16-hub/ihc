@@ -5,4 +5,5 @@ Flask-Mail==0.9.1
 Flask-WTF==1.1.1
 WTForms==3.0.1
 Werkzeug==2.3.7
-psycopg2-binary==2.9.7   # <-- for PostgreSQL
+psycopg2-binary==2.9.7
+gunicorn==21.2.0
